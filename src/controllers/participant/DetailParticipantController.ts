@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
-import { DetailParticipantService } from '../services/participant/DetailParticipantService'
-import { AppError } from '../errors/AppError'
+import { DetailParticipantService } from '../../services/participant/DetailParticipantService'
+import { AppError } from '../../errors/AppError'
 
 class DetailParticipantController {
   async handle(req: Request, res: Response) {

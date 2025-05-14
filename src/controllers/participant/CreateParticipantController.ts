@@ -1,8 +1,8 @@
 // src/controllers/participant/CreateParticipantController.ts
 import { Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
-import { AppError } from '../errors/AppError'
-import { CreateParticipantService } from '../services/participant/CreateParticipantService'
+import { AppError } from '../../errors/AppError'
+import { CreateParticipantService } from '../../services/participant/CreateParticipantService'
 
 class CreateParticipantController {
   async handle(req: Request, res: Response) {
