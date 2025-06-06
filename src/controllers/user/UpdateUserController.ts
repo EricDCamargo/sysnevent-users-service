@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
-import { UpdateParticipantService } from '../../services/participant/UpdateParticipantService'
+import { UpdateUserervice } from '../../services/user/UpdateUserService'
 import { AppError } from '../../errors/AppError'
 
-class UpdateParticipantController {
+class UpdateUserController {
   async handle(req: Request, res: Response) {
     const user_id = req.query.user_id as string
     const { name, email, password } = req.body
@@ -14,10 +14,10 @@ class UpdateParticipantController {
       })
     }
 
-    const updateParticipantService = new UpdateParticipantService()
+    const updateUserervice = new UpdateUserervice()
 
     try {
-      const result = await updateParticipantService.execute({
+      const result = await updateUserervice.execute({
         user_id,
         name,
         email,
@@ -31,9 +31,9 @@ class UpdateParticipantController {
 
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: 'Erro interno ao atualizar participante' })
+        .json({ error: 'Erro interno ao atualizar Usere' })
     }
   }
 }
 
-export { UpdateParticipantController }
+export { UpdateUserController }

@@ -4,36 +4,36 @@ import { StatusCodes } from 'http-status-codes'
 import { AppResponse } from '../../@types/app.types'
 import { hash } from 'bcryptjs'
 
-interface UpdateParticipantRequest {
+interface UpdateUserRequest {
   user_id: string
   name?: string
   email?: string
   password?: string
 }
 
-class UpdateParticipantService {
+class UpdateUserervice {
   async execute({
     user_id,
     name,
     email,
     password
-  }: UpdateParticipantRequest): Promise<AppResponse> {
-    const participant = await prismaClient.participant.findUnique({
+  }: UpdateUserRequest): Promise<AppResponse> {
+    const User = await prismaClient.user.findUnique({
       where: { id: user_id }
     })
 
-    if (!participant) {
+    if (!User) {
       throw new AppError('Usuário não encontrado!', StatusCodes.NOT_FOUND)
     }
 
-    if (email && email !== participant.email) {
-      const emailExists = await prismaClient.participant.findUnique({
+    if (email && email !== User.email) {
+      const emailExists = await prismaClient.user.findUnique({
         where: { email }
       })
 
       if (emailExists && emailExists.id !== user_id) {
         throw new AppError(
-          'E-mail já cadastrado por outro participante!',
+          'E-mail já cadastrado por outro Usere!',
           StatusCodes.CONFLICT
         )
       }
@@ -44,12 +44,12 @@ class UpdateParticipantService {
       passwordHash = await hash(password, 8)
     }
 
-    const updatedParticipant = await prismaClient.participant.update({
+    const updatedUser = await prismaClient.user.update({
       where: { id: user_id },
       data: {
-        name: name || participant.name,
-        email: email || participant.email,
-        password: passwordHash || participant.password
+        name: name || User.name,
+        email: email || User.email,
+        password: passwordHash || User.password
       },
       select: {
         id: true,
@@ -59,10 +59,10 @@ class UpdateParticipantService {
     })
 
     return {
-      data: updatedParticipant,
+      data: updatedUser,
       message: 'Usuário atualizado com sucesso!'
     }
   }
 }
 
-export { UpdateParticipantService }
+export { UpdateUserervice }

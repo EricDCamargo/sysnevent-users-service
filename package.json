@@ -1,8 +1,8 @@
 {
-  "name": "sysnevent-participants-service",
+  "name": "sysnevent-users-service",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/SysNevent/sysnevent-participants-service.git",
+  "repository": "https://github.com/SysNevent/sysnevent-users-service.git",
   "author": "EricDCamargo <ericdcamargo@gmail.com>",
   "license": "MIT",
   "scripts": {

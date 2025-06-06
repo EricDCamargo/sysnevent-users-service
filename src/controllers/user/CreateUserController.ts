@@ -1,13 +1,12 @@
-// src/controllers/participant/CreateParticipantController.ts
 import { Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { AppError } from '../../errors/AppError'
-import { CreateParticipantService } from '../../services/participant/CreateParticipantService'
+import { CreateUserervice } from '../../services/user/CreateUserService'
 
-class CreateParticipantController {
+class CreateUserController {
   async handle(req: Request, res: Response) {
     const { name, email, password } = req.body
-    const service = new CreateParticipantService()
+    const service = new CreateUserervice()
 
     try {
       const result = await service.execute({ name, email, password })
@@ -19,9 +18,9 @@ class CreateParticipantController {
 
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: 'Erro interno ao cadastrar participante' })
+        .json({ error: 'Erro interno ao cadastrar Usere' })
     }
   }
 }
 
-export { CreateParticipantController }
+export { CreateUserController }

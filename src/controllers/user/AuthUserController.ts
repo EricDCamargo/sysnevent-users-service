@@ -1,18 +1,18 @@
 import { Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import { AppError } from '../../errors/AppError'
-import { AuthParticipantService } from '../../services/participant/AuthParticipantService'
+import { AuthUserervice } from '../../services/user/AuthUserService'
 
-class AuthParticipantController {
+class AuthUserController {
   async handle(req: Request, res: Response) {
     const { email, password } = req.body
-    const authService = new AuthParticipantService()
+    const authService = new AuthUserervice()
 
     try {
       const result = await authService.execute({ email, password })
       return res.status(StatusCodes.OK).json(result)
     } catch (error) {
-      console.error('Erro ao autenticar participante:', error)
+      console.error('Erro ao autenticar Usere:', error)
       if (error instanceof AppError) {
         return res.status(error.statusCode).json({ error: error.message })
       }
@@ -23,4 +23,4 @@ class AuthParticipantController {
   }
 }
 
-export { AuthParticipantController }
+export { AuthUserController }

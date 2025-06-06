@@ -10,41 +10,41 @@ interface AuthRequest {
   password: string
 }
 
-class AuthParticipantService {
+class AuthUserervice {
   async execute({ email, password }: AuthRequest): Promise<AppResponse> {
-    const participant = await prismaClient.participant.findUnique({
+    const User = await prismaClient.user.findUnique({
       where: { email }
     })
 
-    if (!participant) {
+    if (!User) {
       throw new AppError(
-        'Participante não encontrado, credenciais incorretas!',
+        'Usere não encontrado, credenciais incorretas!',
         StatusCodes.BAD_REQUEST
       )
     }
 
-    const passwordMatch = await compare(password, participant.password)
+    const passwordMatch = await compare(password, User.password)
     if (!passwordMatch) {
       throw new AppError('Senha incorreta!', StatusCodes.BAD_REQUEST)
     }
 
     const token = sign(
       {
-        name: participant.name,
-        email: participant.email
+        name: User.name,
+        email: User.email
       },
       process.env.JWT_SECRET as string,
       {
-        subject: participant.id,
+        subject: User.id,
         expiresIn: '30d'
       }
     )
 
     return {
       data: {
-        id: participant.id,
-        name: participant.name,
-        email: participant.email,
+        id: User.id,
+        name: User.name,
+        email: User.email,
         token
       },
       message: 'Login realizado com sucesso!'
@@ -52,4 +52,4 @@ class AuthParticipantService {
   }
 }
 
-export { AuthParticipantService }
+export { AuthUserervice }

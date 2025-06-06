@@ -4,18 +4,14 @@ import { AppError } from '../../errors/AppError'
 import { StatusCodes } from 'http-status-codes'
 import { AppResponse } from '../../@types/app.types'
 
-interface ParticipantRequest {
+interface UserRequest {
   name: string
   email: string
   password: string
 }
 
-class CreateParticipantService {
-  async execute({
-    name,
-    email,
-    password
-  }: ParticipantRequest): Promise<AppResponse> {
+class CreateUserervice {
+  async execute({ name, email, password }: UserRequest): Promise<AppResponse> {
     if (!name || !email || !password) {
       throw new AppError(
         'Nome, e-mail e senha são obrigatórios!',
@@ -23,13 +19,13 @@ class CreateParticipantService {
       )
     }
 
-    const participantExists = await prismaClient.participant.findUnique({
+    const UserExists = await prismaClient.user.findUnique({
       where: { email }
     })
 
-    if (participantExists) {
+    if (UserExists) {
       throw new AppError(
-        'E-mail já cadastrado por outro participante!',
+        'E-mail já cadastrado por outro Usere!',
         StatusCodes.CONFLICT
       )
     }
@@ -37,7 +33,7 @@ class CreateParticipantService {
     const passwordHash = await hash(password, 8)
 
     try {
-      const participant = await prismaClient.participant.create({
+      const User = await prismaClient.user.create({
         data: {
           name,
           email,
@@ -51,16 +47,16 @@ class CreateParticipantService {
       })
 
       return {
-        data: participant,
-        message: 'Participante cadastrado com sucesso!'
+        data: User,
+        message: 'Usere cadastrado com sucesso!'
       }
     } catch (error) {
       throw new AppError(
-        'Erro ao criar participante!',
+        'Erro ao criar Usere!',
         StatusCodes.INTERNAL_SERVER_ERROR
       )
     }
   }
 }
 
-export { CreateParticipantService }
+export { CreateUserervice }

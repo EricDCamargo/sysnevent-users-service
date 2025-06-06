@@ -3,9 +3,9 @@ import { AppResponse } from '../../@types/app.types'
 import { AppError } from '../../errors/AppError'
 import prismaClient from '../../prisma'
 
-class DetailParticipantService {
+class DetailUserervice {
   async execute(user_id: string): Promise<AppResponse> {
-    const participant = await prismaClient.participant.findFirst({
+    const User = await prismaClient.user.findFirst({
       where: {
         id: user_id
       },
@@ -16,15 +16,15 @@ class DetailParticipantService {
       }
     })
 
-    if (!participant) {
+    if (!User) {
       throw new AppError('Usuario não encontrado!', StatusCodes.NOT_FOUND)
     }
 
     return {
-      data: participant,
+      data: User,
       message: 'Usuario autenticado!'
     }
   }
 }
 
-export { DetailParticipantService }
+export { DetailUserervice }

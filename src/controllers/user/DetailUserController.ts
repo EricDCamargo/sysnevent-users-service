@@ -1,17 +1,17 @@
 import { Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
-import { DetailParticipantService } from '../../services/participant/DetailParticipantService'
+import { DetailUserervice } from '../../services/user/DetailUserService'
 import { AppError } from '../../errors/AppError'
 
-class DetailParticipantController {
+class DetailUserController {
   async handle(req: Request, res: Response) {
     const user_id = req.user_id
 
-    const detailParticipantService = new DetailParticipantService()
+    const detailUserervice = new DetailUserervice()
 
     try {
-      const participant = await detailParticipantService.execute(user_id)
-      return res.status(StatusCodes.OK).json(participant)
+      const User = await detailUserervice.execute(user_id)
+      return res.status(StatusCodes.OK).json(User)
     } catch (error) {
       if (error instanceof AppError) {
         return res.status(error.statusCode).json({ error: error.message })
@@ -23,4 +23,4 @@ class DetailParticipantController {
   }
 }
 
-export { DetailParticipantController }
+export { DetailUserController }

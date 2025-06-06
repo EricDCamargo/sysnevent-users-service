@@ -1,18 +1,17 @@
 import { Router } from 'express'
-import { AuthParticipantController } from './controllers/participant/AuthParticipantController'
-import { CreateParticipantController } from './controllers/participant/CreateParticipantController'
-import { DetailParticipantController } from './controllers/participant/DetailParticipantController'
+import { AuthUserController } from './controllers/user/AuthUserController'
+import { CreateUserController } from './controllers/user/CreateUserController'
+import { DeleteUserController } from './controllers/user/DeleteUserController'
+import { DetailUserController } from './controllers/user/DetailUserController'
+import { UpdateUserController } from './controllers/user/UpdateUserController'
 import { isAuthenticated } from './middlewares/isAuthenticated'
-import { UpdateParticipantController } from './controllers/participant/UpdateParticipantController'
-import { DeleteParticipantController } from './controllers/participant/DeleteParticipantController'
 
 const router = Router()
 
-router.post('/users', new CreateParticipantController().handle)
-router.post('/session', new AuthParticipantController().handle)
-router.get('/me', isAuthenticated, new DetailParticipantController().handle)
-router.put('/users', isAuthenticated, new UpdateParticipantController().handle)
-router.delete('/users', isAuthenticated, new DeleteParticipantController().handle
-)
+router.post('/users', new CreateUserController().handle)
+router.post('/session', new AuthUserController().handle)
+router.get('/me', isAuthenticated, new DetailUserController().handle)
+router.put('/users', isAuthenticated, new UpdateUserController().handle)
+router.delete('/users', isAuthenticated, new DeleteUserController().handle)
 
 export { router }
