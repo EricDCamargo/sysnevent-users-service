@@ -7,16 +7,16 @@ class DeleteUserController {
   async handle(req: Request, res: Response) {
     const user_id = req.query.user_id as string
 
-    if (req.user_id !== user_id) {
-      return res.status(StatusCodes.FORBIDDEN).json({
-        error: 'Ação não permitida! Você só pode excluir sua própria conta.'
-      })
+    if (!user_id) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: 'Parâmetro "user_id" é obrigatório na query.' })
     }
 
-    const deleteUserervice = new DeleteUserervice()
+    const deleteUserService = new DeleteUserervice()
 
     try {
-      const result = await deleteUserervice.execute(user_id)
+      const result = await deleteUserService.execute(user_id)
       return res.status(StatusCodes.OK).json(result)
     } catch (error) {
       if (error instanceof AppError) {
@@ -25,7 +25,7 @@ class DeleteUserController {
 
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: 'Erro interno ao excluir Usere' })
+        .json({ error: 'Internal Server Error' })
     }
   }
 }

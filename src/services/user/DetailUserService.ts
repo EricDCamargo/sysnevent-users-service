@@ -5,24 +5,31 @@ import prismaClient from '../../prisma'
 
 class DetailUserervice {
   async execute(user_id: string): Promise<AppResponse> {
-    const User = await prismaClient.user.findFirst({
+    if (!user_id) {
+      throw new AppError(
+        'Necessario informar ID do usuario!',
+        StatusCodes.BAD_REQUEST
+      )
+    }
+    const user = await prismaClient.user.findFirst({
       where: {
         id: user_id
       },
       select: {
         id: true,
         name: true,
-        email: true
+        email: true,
+        role: true
       }
     })
 
-    if (!User) {
+    if (!user) {
       throw new AppError('Usuario não encontrado!', StatusCodes.NOT_FOUND)
     }
 
     return {
-      data: User,
-      message: 'Usuario autenticado!'
+      data: user,
+      message: 'Usuario ativo!'
     }
   }
 }

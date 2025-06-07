@@ -6,24 +6,26 @@ import { AppError } from '../../errors/AppError'
 class UpdateUserController {
   async handle(req: Request, res: Response) {
     const user_id = req.query.user_id as string
-    const { name, email, password } = req.body
 
-    if (req.user_id !== user_id) {
-      return res.status(StatusCodes.FORBIDDEN).json({
-        error: 'Ação não permitida! Você só pode editar sua própria conta.'
-      })
+    if (!user_id) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: 'Parâmetro "user_id" é obrigatório na query.' })
     }
+
+    const { name, email, role, password } = req.body
 
     const updateUserervice = new UpdateUserervice()
 
     try {
-      const result = await updateUserervice.execute({
+      const updatedUser = await updateUserervice.execute({
         user_id,
         name,
         email,
+        role,
         password
       })
-      return res.status(StatusCodes.OK).json(result)
+      return res.status(StatusCodes.OK).json(updatedUser)
     } catch (error) {
       if (error instanceof AppError) {
         return res.status(error.statusCode).json({ error: error.message })
@@ -31,7 +33,7 @@ class UpdateUserController {
 
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: 'Erro interno ao atualizar Usere' })
+        .json({ error: 'Internal Server Error' })
     }
   }
 }

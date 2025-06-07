@@ -12,39 +12,41 @@ interface AuthRequest {
 
 class AuthUserervice {
   async execute({ email, password }: AuthRequest): Promise<AppResponse> {
-    const User = await prismaClient.user.findUnique({
+    const user = await prismaClient.user.findUnique({
       where: { email }
     })
 
-    if (!User) {
+    if (!user) {
       throw new AppError(
-        'Usere não encontrado, credenciais incorretas!',
+        'Usuario não encontrado, credenciais incoretas!',
         StatusCodes.BAD_REQUEST
       )
     }
 
-    const passwordMatch = await compare(password, User.password)
+    const passwordMatch = await compare(password, user.password)
     if (!passwordMatch) {
       throw new AppError('Senha incorreta!', StatusCodes.BAD_REQUEST)
     }
 
     const token = sign(
       {
-        name: User.name,
-        email: User.email
+        name: user.name,
+        email: user.email,
+        role: user.role
       },
       process.env.JWT_SECRET as string,
       {
-        subject: User.id,
+        subject: user.id,
         expiresIn: '30d'
       }
     )
 
     return {
       data: {
-        id: User.id,
-        name: User.name,
-        email: User.email,
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
         token
       },
       message: 'Login realizado com sucesso!'

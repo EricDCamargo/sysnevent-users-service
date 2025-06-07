@@ -7,6 +7,11 @@ class DetailUserController {
   async handle(req: Request, res: Response) {
     const user_id = req.user_id
 
+    if (!user_id) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: 'Parâmetro "user_id" é obrigatório.' })
+    }
     const detailUserervice = new DetailUserervice()
 
     try {

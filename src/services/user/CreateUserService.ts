@@ -3,18 +3,25 @@ import { hash } from 'bcryptjs'
 import { AppError } from '../../errors/AppError'
 import { StatusCodes } from 'http-status-codes'
 import { AppResponse } from '../../@types/app.types'
+import { Role } from '@prisma/client'
 
 interface UserRequest {
   name: string
   email: string
+  role: Role
   password: string
 }
 
 class CreateUserervice {
-  async execute({ name, email, password }: UserRequest): Promise<AppResponse> {
-    if (!name || !email || !password) {
+  async execute({
+    name,
+    email,
+    role,
+    password
+  }: UserRequest): Promise<AppResponse> {
+    if (!name || !email || !role || !password) {
       throw new AppError(
-        'Nome, e-mail e senha são obrigatórios!',
+        'Nome, e-mail, função e senha são obrigatórios!',
         StatusCodes.BAD_REQUEST
       )
     }
@@ -25,7 +32,7 @@ class CreateUserervice {
 
     if (UserExists) {
       throw new AppError(
-        'E-mail já cadastrado por outro Usere!',
+        'Email já cadastrado em outro usuario!',
         StatusCodes.CONFLICT
       )
     }
@@ -33,26 +40,25 @@ class CreateUserervice {
     const passwordHash = await hash(password, 8)
 
     try {
-      const User = await prismaClient.user.create({
+      const user = await prismaClient.user.create({
         data: {
           name,
           email,
+          role,
           password: passwordHash
         },
         select: {
           id: true,
           name: true,
-          email: true
+          email: true,
+          role: true
         }
       })
 
-      return {
-        data: User,
-        message: 'Usere cadastrado com sucesso!'
-      }
+      return { data: user, message: 'Usuario criado com sucesso!' }
     } catch (error) {
       throw new AppError(
-        'Erro ao criar Usere!',
+        'Erro ao criar usuario!',
         StatusCodes.INTERNAL_SERVER_ERROR
       )
     }

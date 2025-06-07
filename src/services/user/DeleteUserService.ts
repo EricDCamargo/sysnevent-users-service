@@ -5,12 +5,18 @@ import { AppResponse } from '../../@types/app.types'
 
 class DeleteUserervice {
   async execute(user_id: string): Promise<AppResponse> {
-    const User = await prismaClient.user.findUnique({
+    if (!user_id) {
+      throw new AppError(
+        'Necessario informar ID do usuario!',
+        StatusCodes.BAD_REQUEST
+      )
+    }
+    const userExists = await prismaClient.user.findUnique({
       where: { id: user_id }
     })
 
-    if (!User) {
-      throw new AppError('Usuário não encontrado!', StatusCodes.NOT_FOUND)
+    if (!userExists) {
+      throw new AppError('Usuario não foi encontrado!', StatusCodes.NOT_FOUND)
     }
 
     await prismaClient.user.delete({
@@ -18,7 +24,7 @@ class DeleteUserervice {
     })
 
     return {
-      message: 'Usuário excluído com sucesso!'
+      message: 'Usuario removido com sucesso!'
     }
   }
 }

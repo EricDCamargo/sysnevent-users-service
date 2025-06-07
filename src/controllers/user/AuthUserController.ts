@@ -12,12 +12,12 @@ class AuthUserController {
       const result = await authService.execute({ email, password })
       return res.status(StatusCodes.OK).json(result)
     } catch (error) {
-      console.error('Erro ao autenticar Usere:', error)
+      console.error('Erro ao autenticar:', error)
       if (error instanceof AppError) {
         return res.status(error.statusCode).json({ error: error.message })
       }
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        error: 'Erro interno ao autenticar'
+        error: 'Internal Server Error'
       })
     }
   }
