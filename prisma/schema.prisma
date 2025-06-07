@@ -5,18 +5,22 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  schemas  = ["users"]
 }
 
 enum Role {
   DOCENT_ASSISTANT
   COORDINATOR
   ADMIN
+
+  @@schema("users")
 }
 
 model User {
@@ -27,4 +31,6 @@ model User {
   role       Role
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
+
+  @@schema("users")
 }
