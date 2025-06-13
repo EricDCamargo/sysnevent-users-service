@@ -24,7 +24,8 @@ model User {
   name       String   @db.VarChar(100)
   email      String   @unique @db.VarChar(150)
   password   String   @db.VarChar(255)
+  secretWord String?  @db.VarChar(255)
   role       Role
   created_at DateTime @default(now())
-  updated_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }

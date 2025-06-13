@@ -45,7 +45,8 @@ class AuthUserervice {
                     name: user.name,
                     email: user.email,
                     role: user.role,
-                    token
+                    token,
+                    needsSecretWordSetup: !user.secretWord
                 },
                 message: 'Login realizado com sucesso!'
             };

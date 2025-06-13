@@ -9,6 +9,7 @@ const DetailUserController_1 = require("./controllers/user/DetailUserController"
 const UpdateUserController_1 = require("./controllers/user/UpdateUserController");
 const isAuthenticated_1 = require("./middlewares/isAuthenticated");
 const ListUsersController_1 = require("./controllers/user/ListUsersController");
+const ResetPasswordController_1 = require("./controllers/user/ResetPasswordController");
 const router = (0, express_1.Router)();
 exports.router = router;
 router.post('/users', isAuthenticated_1.isAuthenticated, isAuthenticated_1.isAdmin, new CreateUserController_1.CreateUserController().handle);
@@ -17,3 +18,5 @@ router.get('/me', isAuthenticated_1.isAuthenticated, new DetailUserController_1.
 router.put('/users', isAuthenticated_1.isAuthenticated, isAuthenticated_1.isAdmin, new UpdateUserController_1.UpdateUserController().handle);
 router.delete('/users', isAuthenticated_1.isAuthenticated, isAuthenticated_1.isAdmin, new DeleteUserController_1.DeleteUserController().handle);
 router.get('/users', isAuthenticated_1.isAuthenticated, isAuthenticated_1.isAdmin, new ListUsersController_1.ListUsersController().handle);
+router.post('/register-secret', isAuthenticated_1.isAuthenticated, new ResetPasswordController_1.ResetPasswordController().registerSecretWord);
+router.post('/reset-password', new ResetPasswordController_1.ResetPasswordController().resetPassword);
