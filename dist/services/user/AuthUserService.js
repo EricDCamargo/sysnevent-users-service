@@ -48,7 +48,9 @@ class AuthUserervice {
                     token,
                     needsSecretWordSetup: !user.secretWord
                 },
-                message: 'Login realizado com sucesso!'
+                message: user.secretWord
+                    ? 'Login realizado com sucesso!'
+                    : 'Palavra secreta ainda não cadastrada, cadastre para prosseguir!'
             };
         });
     }
