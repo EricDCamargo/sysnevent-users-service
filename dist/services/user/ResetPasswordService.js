@@ -30,6 +30,9 @@ class ResetPasswordService {
             if (user.secretWord) {
                 throw new AppError_1.AppError('Palavra-chave já foi cadastrada!', http_status_codes_1.StatusCodes.CONFLICT);
             }
+            if (!secretWord || secretWord.length < 6) {
+                throw new AppError_1.AppError('Nova senha deve ter pelo menos 6 caracteres.', http_status_codes_1.StatusCodes.BAD_REQUEST);
+            }
             const hashedSecret = yield (0, bcryptjs_1.hash)(secretWord, 8);
             yield prisma_1.default.user.update({
                 where: { id: user_id },
@@ -47,6 +50,9 @@ class ResetPasswordService {
             const isMatch = yield (0, bcryptjs_1.compare)(secretWord, user.secretWord);
             if (!isMatch) {
                 throw new AppError_1.AppError('Palavra-chave inválida!', http_status_codes_1.StatusCodes.UNAUTHORIZED);
+            }
+            if (!newPassword || newPassword.length < 6) {
+                throw new AppError_1.AppError('Nova senha deve ter pelo menos 6 caracteres.', http_status_codes_1.StatusCodes.BAD_REQUEST);
             }
             const newPasswordHash = yield (0, bcryptjs_1.hash)(newPassword, 8);
             yield prisma_1.default.user.update({

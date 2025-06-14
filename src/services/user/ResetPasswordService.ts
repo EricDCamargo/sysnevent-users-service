@@ -5,9 +5,15 @@ import { StatusCodes } from 'http-status-codes'
 import { AppResponse } from '../../@types/app.types'
 
 class ResetPasswordService {
-  async registerSecretWord(user_id: string, secretWord: string): Promise<AppResponse> {
+  async registerSecretWord(
+    user_id: string,
+    secretWord: string
+  ): Promise<AppResponse> {
     if (!secretWord) {
-      throw new AppError('Palavra-chave é obrigatória!', StatusCodes.BAD_REQUEST)
+      throw new AppError(
+        'Palavra-chave é obrigatória!',
+        StatusCodes.BAD_REQUEST
+      )
     }
 
     const user = await prismaClient.user.findUnique({ where: { id: user_id } })
@@ -23,6 +29,13 @@ class ResetPasswordService {
       )
     }
 
+    if (!secretWord || secretWord.length < 6) {
+      throw new AppError(
+        'Nova senha deve ter pelo menos 6 caracteres.',
+        StatusCodes.BAD_REQUEST
+      )
+    }
+
     const hashedSecret = await hash(secretWord, 8)
 
     await prismaClient.user.update({
@@ -33,7 +46,11 @@ class ResetPasswordService {
     return { message: 'Palavra-chave cadastrada com sucesso!' }
   }
 
-  async resetPassword(email: string, secretWord: string, newPassword: string): Promise<AppResponse> {
+  async resetPassword(
+    email: string,
+    secretWord: string,
+    newPassword: string
+  ): Promise<AppResponse> {
     const user = await prismaClient.user.findUnique({ where: { email } })
 
     if (!user || !user.secretWord) {
@@ -47,6 +64,13 @@ class ResetPasswordService {
 
     if (!isMatch) {
       throw new AppError('Palavra-chave inválida!', StatusCodes.UNAUTHORIZED)
+    }
+
+    if (!newPassword || newPassword.length < 6) {
+      throw new AppError(
+        'Nova senha deve ter pelo menos 6 caracteres.',
+        StatusCodes.BAD_REQUEST
+      )
     }
 
     const newPasswordHash = await hash(newPassword, 8)

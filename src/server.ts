@@ -16,6 +16,17 @@ app.use(cors())
 //   console.log('[HEADERS]', req.headers)
 //   console.log('[BODY]', req.body)
 //   console.log('--------------------------------------------------\n')
+
+//   const originalSend = res.send
+//   res.send = function (body) {
+//     // Log da response ao enviar
+//     console.log('\n--- [MICROSERVIÇO USUÁRIO] Resposta enviada ---')
+//     console.log(`[STATUS] ${res.statusCode}`)
+//     console.log('[HEADERS]', res.getHeaders())
+//     console.log('[BODY]', body)
+//     console.log('--------------------------------------------------\n')
+//     return originalSend.call(this, body)
+//   }
 //   next()
 // })
 
