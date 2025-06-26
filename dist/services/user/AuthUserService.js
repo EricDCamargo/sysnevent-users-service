@@ -37,7 +37,7 @@ class AuthUserervice {
                 role: user.role
             }, process.env.JWT_SECRET, {
                 subject: user.id,
-                expiresIn: '30d'
+                expiresIn: '1d'
             });
             return {
                 data: {

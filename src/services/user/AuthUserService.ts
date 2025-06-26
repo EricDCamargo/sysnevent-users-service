@@ -37,7 +37,7 @@ class AuthUserervice {
       process.env.JWT_SECRET as string,
       {
         subject: user.id,
-        expiresIn: '30d'
+        expiresIn: '1d'
       }
     )
 
