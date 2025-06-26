@@ -17,6 +17,7 @@ const prisma_1 = __importDefault(require("../../prisma"));
 const bcryptjs_1 = require("bcryptjs");
 const AppError_1 = require("../../errors/AppError");
 const http_status_codes_1 = require("http-status-codes");
+const utils_1 = require("../../utils");
 class ResetPasswordService {
     registerSecretWord(user_id, secretWord) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -31,7 +32,7 @@ class ResetPasswordService {
                 throw new AppError_1.AppError('Palavra-chave já foi cadastrada!', http_status_codes_1.StatusCodes.CONFLICT);
             }
             if (!secretWord || secretWord.length < 6) {
-                throw new AppError_1.AppError('Nova senha deve ter pelo menos 6 caracteres.', http_status_codes_1.StatusCodes.BAD_REQUEST);
+                throw new AppError_1.AppError('A palavra chave deve ter pelo menos 6 caracteres.', http_status_codes_1.StatusCodes.BAD_REQUEST);
             }
             const hashedSecret = yield (0, bcryptjs_1.hash)(secretWord, 8);
             yield prisma_1.default.user.update({
@@ -51,8 +52,8 @@ class ResetPasswordService {
             if (!isMatch) {
                 throw new AppError_1.AppError('Palavra-chave inválida!', http_status_codes_1.StatusCodes.UNAUTHORIZED);
             }
-            if (!newPassword || newPassword.length < 6) {
-                throw new AppError_1.AppError('Nova senha deve ter pelo menos 6 caracteres.', http_status_codes_1.StatusCodes.BAD_REQUEST);
+            if (!utils_1.passwordRegex.test(newPassword)) {
+                throw new AppError_1.AppError('A nova senha deve conter no mínimo 6 caracteres, incluindo letras, números e pelo menos um caractere especial.', http_status_codes_1.StatusCodes.BAD_REQUEST);
             }
             const newPasswordHash = yield (0, bcryptjs_1.hash)(newPassword, 8);
             yield prisma_1.default.user.update({

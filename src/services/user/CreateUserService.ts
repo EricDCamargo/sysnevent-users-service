@@ -4,6 +4,7 @@ import { AppError } from '../../errors/AppError'
 import { StatusCodes } from 'http-status-codes'
 import { AppResponse } from '../../@types/app.types'
 import { Role } from '@prisma/client'
+import { passwordRegex } from '../../utils'
 
 interface UserRequest {
   name: string
@@ -34,6 +35,12 @@ class CreateUserervice {
       throw new AppError(
         'Email já cadastrado em outro usuario!',
         StatusCodes.CONFLICT
+      )
+    }
+    if (!passwordRegex.test(password)) {
+      throw new AppError(
+        'A senha deve conter no mínimo 6 caracteres, incluindo letras, números e pelo menos um caractere especial.',
+        StatusCodes.BAD_REQUEST
       )
     }
 

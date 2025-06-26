@@ -17,6 +17,7 @@ const prisma_1 = __importDefault(require("../../prisma"));
 const AppError_1 = require("../../errors/AppError");
 const http_status_codes_1 = require("http-status-codes");
 const bcryptjs_1 = require("bcryptjs");
+const utils_1 = require("../../utils");
 class UpdateUserervice {
     execute(_a) {
         return __awaiter(this, arguments, void 0, function* ({ user_id, name, email, role, password }) {
@@ -46,6 +47,9 @@ class UpdateUserervice {
                 updated_at: new Date()
             };
             if (password) {
+                if (!utils_1.passwordRegex.test(password)) {
+                    throw new AppError_1.AppError('A nova senha deve conter no mínimo 6 caracteres, incluindo letras, números e pelo menos um caractere especial.', http_status_codes_1.StatusCodes.BAD_REQUEST);
+                }
                 dataToUpdate.password = yield (0, bcryptjs_1.hash)(password, 8);
             }
             const updatedUser = yield prisma_1.default.user.update({

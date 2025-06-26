@@ -17,6 +17,7 @@ const prisma_1 = __importDefault(require("../../prisma"));
 const bcryptjs_1 = require("bcryptjs");
 const AppError_1 = require("../../errors/AppError");
 const http_status_codes_1 = require("http-status-codes");
+const utils_1 = require("../../utils");
 class CreateUserervice {
     execute(_a) {
         return __awaiter(this, arguments, void 0, function* ({ name, email, role, password }) {
@@ -28,6 +29,9 @@ class CreateUserervice {
             });
             if (UserExists) {
                 throw new AppError_1.AppError('Email já cadastrado em outro usuario!', http_status_codes_1.StatusCodes.CONFLICT);
+            }
+            if (!utils_1.passwordRegex.test(password)) {
+                throw new AppError_1.AppError('A senha deve conter no mínimo 6 caracteres, incluindo letras, números e pelo menos um caractere especial.', http_status_codes_1.StatusCodes.BAD_REQUEST);
             }
             const passwordHash = yield (0, bcryptjs_1.hash)(password, 8);
             try {

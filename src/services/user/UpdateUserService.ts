@@ -4,6 +4,7 @@ import { StatusCodes } from 'http-status-codes'
 import { AppResponse } from '../../@types/app.types'
 import { hash } from 'bcryptjs'
 import { Role } from '@prisma/client'
+import { passwordRegex } from '../../utils'
 
 interface UpdateUserRequest {
   user_id: string
@@ -60,6 +61,12 @@ class UpdateUserervice {
     }
 
     if (password) {
+      if (!passwordRegex.test(password)) {
+        throw new AppError(
+          'A nova senha deve conter no mínimo 6 caracteres, incluindo letras, números e pelo menos um caractere especial.',
+          StatusCodes.BAD_REQUEST
+        )
+      }
       dataToUpdate.password = await hash(password, 8)
     }
 

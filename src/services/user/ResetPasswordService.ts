@@ -3,6 +3,7 @@ import { hash, compare } from 'bcryptjs'
 import { AppError } from '../../errors/AppError'
 import { StatusCodes } from 'http-status-codes'
 import { AppResponse } from '../../@types/app.types'
+import { passwordRegex } from '../../utils'
 
 class ResetPasswordService {
   async registerSecretWord(
@@ -31,7 +32,7 @@ class ResetPasswordService {
 
     if (!secretWord || secretWord.length < 6) {
       throw new AppError(
-        'Nova senha deve ter pelo menos 6 caracteres.',
+        'A palavra chave deve ter pelo menos 6 caracteres.',
         StatusCodes.BAD_REQUEST
       )
     }
@@ -66,9 +67,9 @@ class ResetPasswordService {
       throw new AppError('Palavra-chave inválida!', StatusCodes.UNAUTHORIZED)
     }
 
-    if (!newPassword || newPassword.length < 6) {
+    if (!passwordRegex.test(newPassword)) {
       throw new AppError(
-        'Nova senha deve ter pelo menos 6 caracteres.',
+        'A nova senha deve conter no mínimo 6 caracteres, incluindo letras, números e pelo menos um caractere especial.',
         StatusCodes.BAD_REQUEST
       )
     }
